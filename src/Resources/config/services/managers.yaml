@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            Psr\Log\LoggerInterface: '@lupasearch_sylius.logger'
+        
+    _instanceof:
+        LupaSearch\SyliusLupaSearchPlugin\Manager\LupaExportManagerInterface:
+            tags: [ 'lupasearch.export.manager' ]
+        
+    LupaSearch\SyliusLupaSearchPlugin\Manager\:
+        resource: '../../../Manager/*'
+
+    LupaSearch\SyliusLupaSearchPlugin\Manager\LupaExportManager:
+        arguments:
+            $listeners: !tagged_iterator 'lupasearch.export.manager'
+
+    LupaSearch\SyliusLupaSearchPlugin\Manager\LupaExportManagerInterface: '@LupaSearch\SyliusLupaSearchPlugin\Manager\LupaExportManager'

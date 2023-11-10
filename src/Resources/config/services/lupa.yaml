@@ -1,0 +1,5 @@
+imports:
+    - { resource: lupa_search/api.yaml }
+    - { resource: lupa_search/client.yaml }
+    - { resource: lupa_search/factories.yaml }
+    - { resource: lupa_search/handlers.yaml }

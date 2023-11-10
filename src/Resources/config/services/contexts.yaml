@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    LupaSearch\SyliusLupaSearchPlugin\Context\:
+        resource: '../../../Context/*'
+
+    LupaSearch\SyliusLupaSearchPlugin\Context\LupaContextInterface: '@LupaSearch\SyliusLupaSearchPlugin\Context\LupaContext'

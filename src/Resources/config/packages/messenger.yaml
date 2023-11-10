@@ -1,0 +1,24 @@
+framework:
+    messenger:
+        transports:
+            lupasearch_export:
+                dsn: '%env(LUPA_SEARCH_MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: lupasearch_export
+                        type: direct
+                        default_publish_routing_key: 'export'
+                    queues:
+                        lupasearch.export:
+                            binding_keys: ['export']
+                    retry:
+                        max_retries: 5
+                        delay: 5000
+                        max_delay: 0
+                        multiplier: 2
+        buses:
+            lupasearch.bus.export:
+        routing:
+            LupaSearch\SyliusLupaSearchPlugin\Messenger\Command\ExportToLupa: lupasearch_export
+            LupaSearch\SyliusLupaSearchPlugin\Messenger\Command\QueueExportToLupa: lupasearch_export
+            LupaSearch\SyliusLupaSearchPlugin\Messenger\Command\InitiateExportToLupa: lupasearch_export

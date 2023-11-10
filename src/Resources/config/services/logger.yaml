@@ -1,0 +1,8 @@
+services:
+    lupasearch_sylius.logger:
+        class: Symfony\Bridge\Monolog\Logger
+        autowire: true
+        arguments:
+            $name: lupasearch_sylius
+        tags:
+            - { name: monolog.logger, channel: lupasearch_sylius }

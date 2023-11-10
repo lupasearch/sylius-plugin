@@ -1,0 +1,12 @@
+{
+  "license": "MIT",
+  "scripts": {
+    "build": "encore dev --config ./tests/Application/webpack.config.js",
+    "build:prod": "encore production --config ./tests/Application/webpack.config.js",
+    "postinstall": "semantic-ui-css-patch",
+    "watch": "encore dev --config ./tests/Application/webpack.config.js --watch"
+  },
+  "devDependencies": {
+    "@sylius-ui/frontend": "^1.0"
+  }
+}

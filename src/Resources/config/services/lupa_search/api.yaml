@@ -1,0 +1,10 @@
+services:
+    LupaSearch\Api\DocumentsApi:
+        class: LupaSearch\Api\DocumentsApi
+        arguments:
+            $client: '@LupaSearch\LupaClient'
+        
+    LupaSearch\Api\SearchQueriesApi:
+        class: LupaSearch\Api\SearchQueriesApi
+        arguments:
+            $client: '@LupaSearch\LupaClient'

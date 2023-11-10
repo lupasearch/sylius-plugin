@@ -1,0 +1,11 @@
+LupaSearch\SyliusLupaSearchPlugin\Model\Facet:
+    attributes:
+        key:
+            groups:
+                - lupasearch:search_query:read
+        type:
+            groups:
+                - lupasearch:search_query:read
+        label:
+            groups:
+                - lupasearch:search_query:read
