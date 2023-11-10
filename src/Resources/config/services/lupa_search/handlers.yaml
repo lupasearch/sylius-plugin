@@ -1,0 +1,6 @@
+services:
+    LupaSearch\Handlers\RequestErrorHandler:
+        class: LupaSearch\Handlers\RequestErrorHandler
+    
+    LupaSearch\Handlers\ErrorHandlersInterfaces: '@LupaSearch\Handlers\RequestErrorHandler'
+        

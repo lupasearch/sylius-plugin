@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: false
+    
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: lupasearch.bus.export }
+    
+    LupaSearch\SyliusLupaSearchPlugin\Messenger\CommandHandler\:
+        resource: '../../../Messenger/CommandHandler/*'    

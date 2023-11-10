@@ -1,0 +1,29 @@
+LupaSearch\SyliusLupaSearchPlugin\Model\Document:
+    attributes:
+        id:
+            groups:
+                - lupasearch:document:read
+        code:
+            groups:
+                - lupasearch:document:read
+        name:
+            groups:
+                - lupasearch:document:read
+        variant_code:
+            groups:
+                - lupasearch:document:read
+        slug:
+            groups:
+                - lupasearch:document:read
+        main_image:
+            groups:
+                - lupasearch:document:read
+        main_taxon_code:
+            groups:
+                - lupasearch:document:read
+        taxon_codes:
+            groups:
+                - lupasearch:document:read
+        product_id:
+            groups:
+                - lupasearch:document:read

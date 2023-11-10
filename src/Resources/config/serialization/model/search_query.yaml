@@ -1,0 +1,11 @@
+LupaSearch\SyliusLupaSearchPlugin\Model\SearchQuery:
+    attributes:
+        description:
+            groups:
+                - lupasearch:search_query:read
+        configuration:
+            groups:
+                - lupasearch:search_query:read
+        debugMode:
+            groups:
+                - lupasearch:search_query:read

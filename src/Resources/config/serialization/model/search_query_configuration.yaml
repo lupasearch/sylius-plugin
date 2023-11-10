@@ -1,0 +1,74 @@
+LupaSearch\SyliusLupaSearchPlugin\Model\SearchQueryConfiguration:
+    attributes:
+        queryFields:
+            groups:
+                - lupasearch:search_query:read
+        match:
+            groups:
+                - lupasearch:search_query:read
+        selectFields:
+            groups:
+                - lupasearch:search_query:read
+        filterableFields:
+            groups:
+                - lupasearch:search_query:read
+        offset:
+            groups:
+                - lupasearch:search_query:read
+        limit:
+            groups:
+                - lupasearch:search_query:read
+        sort:
+            groups:
+                - lupasearch:search_query:read
+        exactTotalCount:
+            groups:
+                - lupasearch:search_query:read
+        exactMatchMultiplier:
+            groups:
+                - lupasearch:search_query:read
+        priorityFields:
+            groups:
+                - lupasearch:search_query:read
+        boostPhrase:
+            groups:
+                - lupasearch:search_query:read
+        boost:
+            groups:
+                - lupasearch:search_query:read
+        didYouMean:
+            groups:
+                - lupasearch:search_query:read
+        similarQueries:
+            groups:
+                - lupasearch:search_query:read
+        similarResults:
+            groups:
+                - lupasearch:search_query:read
+        aiSynonyms:
+            groups:
+                - lupasearch:search_query:read
+        selectableFields:
+            groups:
+                - lupasearch:search_query:read
+        dynamicFacets:
+            groups:
+                - lupasearch:search_query:read
+        filters:
+            groups:
+                - lupasearch:search_query:read
+        exclusionFilters:
+            groups:
+                - lupasearch:search_query:read
+        statisticalBoost:
+            groups:
+                - lupasearch:search_query:read
+        personalization:
+            groups:
+                - lupasearch:search_query:read
+        collapse:
+            groups:
+                - lupasearch:search_query:read
+        facets:
+            groups:
+                - lupasearch:search_query:read

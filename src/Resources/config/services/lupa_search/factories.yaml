@@ -1,0 +1,6 @@
+services:
+    LupaSearch\Factories\HttpClientFactory:
+        class: LupaSearch\Factories\HttpClientFactory
+        
+    LupaSearch\Factories\HttpClientFactoryInterface: '@LupaSearch\Factories\HttpClientFactory'
+        

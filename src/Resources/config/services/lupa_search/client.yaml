@@ -1,0 +1,6 @@
+services:
+    LupaSearch\LupaClient:
+        class: LupaSearch\LupaClient
+    
+    LupaSearch\LupaClientInterface: '@LupaSearch\LupaClient'
+        

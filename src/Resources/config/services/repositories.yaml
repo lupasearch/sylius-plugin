@@ -1,0 +1,27 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    LupaSearch\SyliusLupaSearchPlugin\Repository\:
+        resource: '../../../Repository/*'
+        
+    LupaSearch\SyliusLupaSearchPlugin\Repository\Product\ProductVariantRepository:
+        arguments:
+            $registry: '@doctrine'
+            $entityClass: '%sylius.model.product_variant.class%'
+
+    LupaSearch\SyliusLupaSearchPlugin\Repository\Option\ProductOptionRepository:
+        arguments:
+            $registry: '@doctrine'
+            $entityClass: '%sylius.model.product_option.class%'
+            
+    LupaSearch\SyliusLupaSearchPlugin\Repository\Attribute\ProductAttributeRepository:
+        arguments:
+            $registry: '@doctrine'
+            $entityClass: '%sylius.model.product_attribute.class%'
+
+    LupaSearch\SyliusLupaSearchPlugin\Repository\LupaExportableIds\LupaExportableIdsRepository:
+        arguments:
+            $registry: '@doctrine'
+            $entityClass: '%lupasearch_sylius_lupa_search.model.lupa_exportable_ids.class%'

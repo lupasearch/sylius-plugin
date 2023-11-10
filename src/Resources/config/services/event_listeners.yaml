@@ -1,0 +1,50 @@
+services:
+    _defaults:
+        autowire: true
+    
+    LupaSearch\SyliusLupaSearchPlugin\EventListener\ExportToLupaListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_translation.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.taxon.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.taxon.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.taxon.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.taxon_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.taxon_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.taxon_translation.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_variant.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_variant.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_variant.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_variant_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_variant_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_variant_translation.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_option.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_option.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_option.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_option_value.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_option_value.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_option_value.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_option_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_option_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_option_translation.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_option_value_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_option_value_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_option_value_translation.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_attribute.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_attribute.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_attribute.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_attribute_value.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_attribute_value.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_attribute_value.class%' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: '%sylius.model.product_attribute_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: '%sylius.model.product_attribute_translation.class%', method: postUpdateOrPostPersist }
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: '%sylius.model.product_attribute_translation.class%' }
+            - { name: doctrine.event_listener, event: postFlush }
+            
+    LupaSearch\SyliusLupaSearchPlugin\EventListener\InitiateExportToLupaSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
