@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LupaSeach\SyliusLupaSearchPlugin\DependencyInjection;
+namespace LupaSearch\SyliusLupaSearchPlugin\DependencyInjection;
 
 use LupaSearch\SyliusLupaSearchPlugin\Commands\ExportLupaDocumentsCommand;
 use LupaSearch\SyliusLupaSearchPlugin\Commands\InitiateLupaDocumentsExportCommand;
