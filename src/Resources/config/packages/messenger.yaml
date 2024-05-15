@@ -2,7 +2,7 @@ framework:
     messenger:
         transports:
             lupasearch_export:
-                dsn: '%env(LUPA_SEARCH_MESSENGER_TRANSPORT_DSN)%'
+                dsn: '%env(LUPASEARCH_MESSENGER_TRANSPORT_DSN)%'
                 options:
                     exchange:
                         name: lupasearch_export
