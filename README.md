@@ -1,10 +1,14 @@
 # LupaSearch Sylius plugin
 
+The LupaSearch Sylius plugin seamlessly integrates your Sylius store with the LupaSearch SaaS platform. This plugin handles the synchronization of product data and search configuration, ensuring your store's search functionality is always up-to-date and optimized for performance.
+
 ## Compatibility
 
 The plugin is compatible with Sylius 1.12.\*
 
 ## Installation
+
+> **_NOTE:_** Before installation, please contact our support team at support@lupasearch.com to obtain the necessary credentials and onboarding information.
 
 To install the LupaSearch plugin, follow these steps:
 
