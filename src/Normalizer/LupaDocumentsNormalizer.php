@@ -12,7 +12,9 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Webmozart\Assert\Assert;
 
-class LupaDocumentsNormalizer implements NormalizerInterface, NormalizerAwareInterface
+class LupaDocumentsNormalizer implements
+    NormalizerInterface,
+    NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 
@@ -23,8 +25,11 @@ class LupaDocumentsNormalizer implements NormalizerInterface, NormalizerAwareInt
      *
      * @throws ExceptionInterface
      */
-    public function normalize($object, string $format = null, array $context = []): array
-    {
+    public function normalize(
+        $object,
+        string $format = null,
+        array $context = []
+    ): array {
         Assert::isInstanceOf($object, DocumentsInterface::class);
 
         $normalizedDocuments = [];
@@ -32,13 +37,10 @@ class LupaDocumentsNormalizer implements NormalizerInterface, NormalizerAwareInt
         /** @var DocumentInterface $document */
         foreach ($object as $document) {
             /** @var array<string, mixed> $normalizedDocument */
-            $normalizedDocument = $this->normalizer->normalize($document, $format, $context);
-            /** @var array<string, mixed> $normalizedAttributes */
-            $normalizedAttributes = $this->normalizer->normalize($document->getAttributes(), $format, $context);
-
-            $normalizedDocuments[] = array_merge(
-                $normalizedDocument,
-                $normalizedAttributes,
+            $normalizedDocuments[] = $this->normalizer->normalize(
+                $document,
+                $format,
+                $context
             );
         }
 

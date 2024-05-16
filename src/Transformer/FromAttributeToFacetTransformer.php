@@ -22,7 +22,7 @@ class FromAttributeToFacetTransformer implements FromAttributeToFacetTransformer
 
         Assert::notNull($productAttribute->getCode());
         Assert::notNull($productAttribute->getTranslation()->getName());
-        $facet->setKey($productAttribute->getCode());
+        $facet->setKey('attributes.' . $productAttribute->getCode());
         $facet->setType(FacetType::Terms);
         $facet->setLabel($productAttribute->getTranslation()->getName());
 

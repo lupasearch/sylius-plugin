@@ -54,4 +54,12 @@ interface DocumentInterface
     public function getProductId(): ?string;
 
     public function setProductId(?string $productId): self;
+
+    public function getProductName(): ?string;
+
+    public function setProductName(?string $productName): self;
+
+    public function getProductMainImage(): ?string;
+
+    public function setProductMainImage(?string $productMainImage): self;
 }

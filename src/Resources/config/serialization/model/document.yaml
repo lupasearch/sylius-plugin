@@ -27,3 +27,12 @@ LupaSearch\SyliusLupaSearchPlugin\Model\Document:
         product_id:
             groups:
                 - lupasearch:document:read
+        attributes:
+            groups:
+                - lupasearch:document:read
+        product_name:
+            groups:
+                - lupasearch:document:read
+        product_main_image:
+            groups:
+                - lupasearch:document:read
