@@ -22,7 +22,7 @@ class FromOptionToFacetTransformer implements FromOptionToFacetTransformerInterf
 
         Assert::notNull($productOption->getCode());
         Assert::notNull($productOption->getTranslation()->getName());
-        $facet->setKey($productOption->getCode());
+        $facet->setKey('attributes.' . $productOption->getCode());
         $facet->setType(FacetType::Terms);
         $facet->setLabel($productOption->getTranslation()->getName());
 

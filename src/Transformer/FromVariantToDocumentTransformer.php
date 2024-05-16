@@ -10,6 +10,7 @@ use LupaSearch\SyliusLupaSearchPlugin\Generator\DocumentIdGeneratorInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Model\DocumentInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Model\DocumentsInterface;
 use Sylius\Component\Core\Model\ImageInterface;
+use Sylius\Component\Core\Model\ProductImageInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 
@@ -50,11 +51,7 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
             return $document;
         }
 
-        $document->setTaxonCodes($this->getTaxonCodes($product));
-        $document->setMainTaxonCode($product->getMainTaxon()?->getCode());
-        $document->setProductId((string) $product->getId());
-
-        return $document;
+        return $this->populateWithProductProperties($document, $product);
     }
 
     public function transformAll(array $productVariants): DocumentsInterface
@@ -66,6 +63,21 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
         }
 
         return $this->documentsFactory->createFromDocumentArray($documentArray);
+    }
+
+    protected function populateWithProductProperties(DocumentInterface $document, ProductInterface $product): DocumentInterface
+    {
+        $document->setTaxonCodes($this->getTaxonCodes($product));
+        $document->setMainTaxonCode($product->getMainTaxon()?->getCode());
+        $document->setProductId((string)$product->getId());
+        $document->setProductName($product->getName());
+
+        $productImage = $product->getImages()->first();
+        if ($productImage instanceof ProductImageInterface) {
+            $document->setProductMainImage($productImage->getPath());
+        }
+
+        return $document;
     }
 
     /**

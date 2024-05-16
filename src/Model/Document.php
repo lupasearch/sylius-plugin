@@ -28,6 +28,10 @@ class Document implements DocumentInterface
 
     private ?string $productId = null;
 
+    private ?string $productName = null;
+
+    private ?string $productMainImage = null;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -144,6 +148,30 @@ class Document implements DocumentInterface
     public function setProductId(?string $productId): self
     {
         $this->productId = $productId;
+
+        return $this;
+    }
+
+    public function getProductName(): ?string
+    {
+        return $this->productName;
+    }
+
+    public function setProductName(?string $productName): self
+    {
+        $this->productName = $productName;
+
+        return $this;
+    }
+
+    public function getProductMainImage(): ?string
+    {
+        return $this->productMainImage;
+    }
+
+    public function setProductMainImage(?string $productMainImage): self
+    {
+        $this->productMainImage = $productMainImage;
 
         return $this;
     }
