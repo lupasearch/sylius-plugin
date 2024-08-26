@@ -4,7 +4,7 @@ The LupaSearch Sylius plugin seamlessly integrates your Sylius store with the Lu
 
 ## Compatibility
 
-The plugin is compatible with Sylius 1.12.\*
+The plugin is compatible with Sylius 1.12.\* and 1.13.\*
 
 ## Installation
 
