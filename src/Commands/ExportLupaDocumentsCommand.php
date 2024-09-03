@@ -45,13 +45,14 @@ class ExportLupaDocumentsCommand extends Command
         while (0 !== count($productVariants)) {
             $documentsToReplace = $this->fromVariantToDocumentTransformer->transformAll($productVariants);
 
-            $offset += $this->limit;
-            $productVariants = $this->productVariantRepository->findAllEnabledInBatches($this->limit, $offset);
             if ($this->limit > count($productVariants)) {
                 $documentsToReplace->setFinished(true);
             }
 
             $this->documentsApiManager->replaceAllDocuments(documents: $documentsToReplace);
+
+            $offset += $this->limit;
+            $productVariants = $this->productVariantRepository->findAllEnabledInBatches($this->limit, $offset);
         }
 
         $io->success('Done.');
