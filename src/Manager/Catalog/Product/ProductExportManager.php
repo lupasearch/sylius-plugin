@@ -27,6 +27,12 @@ class ProductExportManager implements LupaExportManagerInterface
 
     public function export(object $object): void
     {
+        if (false === $object->isEnabled()) {
+            $this->delete($object);
+
+            return;
+        }
+
         $variants = $object->getVariants();
         foreach ($variants as $variant) {
             if (null === $variant->getId()) {
