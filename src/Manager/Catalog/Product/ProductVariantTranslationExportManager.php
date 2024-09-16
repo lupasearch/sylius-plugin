@@ -30,6 +30,12 @@ class ProductVariantTranslationExportManager implements LupaExportManagerInterfa
     public function export(object $object): void
     {
         $productVariant = $object->getTranslatable();
+        if (false === $productVariant->isEnabled()) {
+            $this->delete($object);
+
+            return;
+        }
+
         Assert::isInstanceOf($productVariant, ProductVariantInterface::class);
         if (null === $productVariant->getId()) {
             $this->logger->warning(

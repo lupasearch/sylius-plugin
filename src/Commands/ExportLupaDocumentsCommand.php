@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LupaSearch\SyliusLupaSearchPlugin\Commands;
 
+use LupaSearch\SyliusLupaSearchPlugin\Factory\DocumentsFactoryInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Manager\Api\DocumentsApiManagerInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Repository\Product\ProductVariantRepositoryInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Transformer\FromVariantToDocumentTransformerInterface;
@@ -19,6 +20,7 @@ class ExportLupaDocumentsCommand extends Command
         private readonly ProductVariantRepositoryInterface $productVariantRepository,
         private readonly FromVariantToDocumentTransformerInterface $fromVariantToDocumentTransformer,
         private readonly DocumentsApiManagerInterface $documentsApiManager,
+        private readonly DocumentsFactoryInterface $documentsFactory,
         private readonly int $limit,
     ) {
         parent::__construct();
@@ -37,22 +39,35 @@ class ExportLupaDocumentsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $offset = 0;
+        $isFinishedSet = false;
         $io = new SymfonyStyle($input, $output);
         $io->info('Product variant sending to Lupa has started.');
 
         $productVariants = $this->productVariantRepository->findAllEnabledInBatches($this->limit, $offset);
+        if (0 === count($productVariants)) {
+            $io->error('No product variants were found while trying to export the first batch to LupaSearch.');
+
+            return 1;
+        }
 
         while (0 !== count($productVariants)) {
             $documentsToReplace = $this->fromVariantToDocumentTransformer->transformAll($productVariants);
 
             if ($this->limit > count($productVariants)) {
                 $documentsToReplace->setFinished(true);
+                $isFinishedSet = true;
             }
 
             $this->documentsApiManager->replaceAllDocuments(documents: $documentsToReplace);
 
             $offset += $this->limit;
             $productVariants = $this->productVariantRepository->findAllEnabledInBatches($this->limit, $offset);
+        }
+
+        if (!$isFinishedSet) {
+            $documents = $this->documentsFactory->createNew();
+            $documents->setFinished(true);
+            $this->documentsApiManager->replaceAllDocuments($documents);
         }
 
         $io->success('Done.');

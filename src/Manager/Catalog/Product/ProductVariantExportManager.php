@@ -27,6 +27,12 @@ class ProductVariantExportManager implements LupaExportManagerInterface
 
     public function export(object $object): void
     {
+        if (false === $object->isEnabled()) {
+            $this->delete($object);
+
+            return;
+        }
+
         if (null === $object->getId()) {
             $this->logger->warning(
                 'Product variant has no id',
