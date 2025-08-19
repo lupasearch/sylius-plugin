@@ -30,8 +30,12 @@ final class LupaSearchSyliusLupaSearchExtension extends AbstractResourceExtensio
         $this->registerResources(Configuration::NAME, $config['driver'], $config['resources'], $container);
 
         $lupaClientDefinition = $container->getDefinition(LupaClient::class);
-        $lupaClientDefinition->addMethodCall('setEmail', [$config[Configuration::EMAIL]]);
-        $lupaClientDefinition->addMethodCall('setPassword', [$config[Configuration::PASSWORD]]);
+        if (empty($config[Configuration::API_KEY])) {
+            $lupaClientDefinition->addMethodCall('setEmail', [$config[Configuration::EMAIL]]);
+            $lupaClientDefinition->addMethodCall('setPassword', [$config[Configuration::PASSWORD]]);
+        } else {
+            $lupaClientDefinition->addMethodCall('setApiKey', [$config[Configuration::API_KEY]]);
+        }
 
         $sendAllVariantsToLupaDefinition = $container->getDefinition(ExportLupaDocumentsCommand::class);
         $sendAllVariantsToLupaDefinition->setArgument(
