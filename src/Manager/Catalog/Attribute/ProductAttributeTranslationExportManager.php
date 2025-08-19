@@ -43,7 +43,7 @@ class ProductAttributeTranslationExportManager implements LupaExportManagerInter
 
         $variants = $this->productVariantRepository->findAllEnabledIdsByAttributeCode($productAttribute->getCode());
         foreach ($variants as $variantId) {
-            $this->lupaContext->addProductVariantIdToAdd($variantId);
+            $this->lupaContext->addIdToAdd($variantId);
         }
     }
 
@@ -61,7 +61,7 @@ class ProductAttributeTranslationExportManager implements LupaExportManagerInter
 
         $variants = $this->productVariantRepository->findAllEnabledIdsByAttributeCode($productAttribute->getCode());
         foreach ($variants as $variantId) {
-            $this->lupaContext->addProductVariantIdToAdd($variantId);
+            $this->lupaContext->addIdToAdd($variantId);
         }
     }
 }

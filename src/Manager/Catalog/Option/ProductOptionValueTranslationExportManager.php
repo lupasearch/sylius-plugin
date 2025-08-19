@@ -46,7 +46,7 @@ class ProductOptionValueTranslationExportManager implements LupaExportManagerInt
         );
 
         foreach ($variants as $variantId) {
-            $this->lupaContext->addProductVariantIdToAdd($variantId);
+            $this->lupaContext->addIdToAdd($variantId);
         }
     }
 
@@ -67,7 +67,7 @@ class ProductOptionValueTranslationExportManager implements LupaExportManagerInt
         );
 
         foreach ($variants as $variantId) {
-            $this->lupaContext->addProductVariantIdToAdd($variantId);
+            $this->lupaContext->addIdToAdd($variantId);
         }
     }
 }

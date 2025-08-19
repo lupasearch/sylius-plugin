@@ -41,7 +41,7 @@ class ProductVariantExportManager implements LupaExportManagerInterface
             return;
         }
 
-        $this->lupaContext->addProductVariantIdToAdd($object->getId());
+        $this->lupaContext->addIdToAdd($object->getId());
     }
 
     public function delete(object $object): void
@@ -54,6 +54,6 @@ class ProductVariantExportManager implements LupaExportManagerInterface
             return;
         }
 
-        $this->lupaContext->addProductVariantIdToRemove($object->getId());
+        $this->lupaContext->addIdToRemove($object->getId());
     }
 }

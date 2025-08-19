@@ -23,25 +23,25 @@ class QueueExportToLupaHandler implements MessageHandlerInterface
     {
         $productVariantIdsToAdd = $this->lupaExportableIdsRepository->findIdsThatAreNotAlreadyThere(
             $queueExportToLupa->getProductVariantsToAdd(),
-            'productVariantToAddId',
+            'idToAdd',
         );
         $productVariantIdsToRemove = $this->lupaExportableIdsRepository->findIdsThatAreNotAlreadyThere(
             $queueExportToLupa->getProductVariantsToRemove(),
-            'productVariantToRemoveId',
+            'idToRemove',
         );
 
         if (!empty($productVariantIdsToAdd)) {
-            foreach ($productVariantIdsToAdd as $productVariantIdToAdd) {
+            foreach ($productVariantIdsToAdd as $idToAdd) {
                 $lupaExportableIds = $this->lupaExportableIdsFactory->createNew();
-                $lupaExportableIds->setProductVariantToAddId($productVariantIdToAdd);
+                $lupaExportableIds->setIdToAdd($idToAdd);
                 $this->entityManager->persist($lupaExportableIds);
             }
         }
 
         if (!empty($productVariantIdsToRemove)) {
-            foreach ($productVariantIdsToRemove as $productVariantIdToRemove) {
+            foreach ($productVariantIdsToRemove as $idToRemove) {
                 $lupaExportableIds = $this->lupaExportableIdsFactory->createNew();
-                $lupaExportableIds->setProductVariantToRemoveId($productVariantIdToRemove);
+                $lupaExportableIds->setIdToRemove($idToRemove);
                 $this->entityManager->persist($lupaExportableIds);
             }
         }

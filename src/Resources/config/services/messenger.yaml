@@ -1,7 +1,7 @@
 services:
     _defaults:
         autowire: true
-        autoconfigure: false
+        autoconfigure: true
     
     _instanceof:
         Symfony\Component\Messenger\Handler\MessageHandlerInterface:

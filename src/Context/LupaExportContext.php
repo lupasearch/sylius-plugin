@@ -7,41 +7,41 @@ namespace LupaSearch\SyliusLupaSearchPlugin\Context;
 class LupaExportContext implements LupaExportContextInterface
 {
     /** @var array<int, bool> */
-    private array $productVariantIdsToAdd = [];
+    private array $idsToAdd = [];
 
     /** @var array<int, bool> */
-    private array $productVariantIdsToRemove = [];
+    private array $idsToRemove = [];
 
     private bool $queueForExport = true;
 
-    public function addProductVariantIdToAdd(int $productVariantId): void
+    public function addIdToAdd(int $id): void
     {
-        $this->productVariantIdsToAdd[$productVariantId] = false;
+        $this->idsToAdd[$id] = false;
     }
 
-    public function getProductVariantIdsToAdd(): array
+    public function getIdsToAdd(): array
     {
-        return array_keys($this->productVariantIdsToAdd);
+        return array_keys($this->idsToAdd);
     }
 
-    public function addProductVariantIdToRemove(int $productVariantId): void
+    public function addIdToRemove(int $id): void
     {
-        $this->productVariantIdsToRemove[$productVariantId] = false;
+        $this->idsToRemove[$id] = false;
     }
 
-    public function getProductVariantIdsToRemove(): array
+    public function getIdsToRemove(): array
     {
-        return array_keys($this->productVariantIdsToRemove);
+        return array_keys($this->idsToRemove);
     }
 
-    public function clearProductVariantIdsToAdd(): void
+    public function clearIdsToAdd(): void
     {
-        $this->productVariantIdsToAdd = [];
+        $this->idsToAdd = [];
     }
 
-    public function clearProductVariantIdsToRemove(): void
+    public function clearIdsToRemove(): void
     {
-        $this->productVariantIdsToRemove = [];
+        $this->idsToRemove = [];
     }
 
     public function setQueueForExport(bool $queueForExport): void

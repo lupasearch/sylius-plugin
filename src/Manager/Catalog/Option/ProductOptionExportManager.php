@@ -39,7 +39,7 @@ class ProductOptionExportManager implements LupaExportManagerInterface
 
         $variants = $this->productVariantRepository->findAllEnabledIdsByOptionCode($object->getCode());
         foreach ($variants as $variantId) {
-            $this->lupaContext->addProductVariantIdToAdd($variantId);
+            $this->lupaContext->addToAdd($variantId);
         }
     }
 
@@ -55,7 +55,7 @@ class ProductOptionExportManager implements LupaExportManagerInterface
 
         $variants = $this->productVariantRepository->findAllEnabledIdsByOptionCode($object->getCode());
         foreach ($variants as $variantId) {
-            $this->lupaContext->addProductVariantIdToAdd($variantId);
+            $this->lupaContext->addIdToAdd($variantId);
         }
     }
 }

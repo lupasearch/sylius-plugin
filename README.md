@@ -4,7 +4,7 @@ The LupaSearch Sylius plugin seamlessly integrates your Sylius store with the Lu
 
 ## Compatibility
 
-The plugin is compatible with Sylius 1.12.\* and 1.13.\*
+The plugin is compatible with Sylius 1.12.x - 1.14.x
 
 ## Installation
 
@@ -124,5 +124,3 @@ bin/console lupasearch:documents:export:initiate
 This command could be run after you have made changes to your product variants in your Sylius project. Entities associated with product variants that are updated via requests, such as through the Sylius Admin Panel or the API, get synchronized with LupaSearch upon the completion of the KernelFinishRequest. This process is managed using the ProductVariantDispatcherSubscriber class. This command is only needed if catalog updates are made in CLI context (for example during nightly imports).
 
 > ❗ Please note that when using CLI (for example, Sylius catalog import), you should set isQueueForExport() to false in LupaExportContext. This will ensure that the product variants would not be put in the queue for export to LupaSearch. Instead, a good practice is to run the `lupasearch:documents:export:initiate` command after the import is finished.
-
-> ❗ Currently, plugin is limited to `naming_strategy: doctrine.orm.naming_strategy.underscore` setting in `config/packages/doctrine.yaml` configuration file to function properly.

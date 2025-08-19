@@ -27,27 +27,31 @@ class ExportToLupaHandler implements MessageHandlerInterface
      */
     public function __invoke(ExportToLupa $exportToLupa): void
     {
-        $productVariantsIdsToAdd = [];
-        $productVariantsIdsToRemove = [];
+        $idsToAdd = [];
+        $idsToRemove = [];
 
         foreach ($exportToLupa->getLupaExportableIds() as $lupaExportableId) {
-            if (null !== $lupaExportableId->getProductVariantToAddId()) {
-                $productVariantsIdsToAdd[] = $lupaExportableId->getProductVariantToAddId();
+            if (null !== $lupaExportableId->getIdToAdd()) {
+                $idsToAdd[] = $lupaExportableId->getIdToAdd();
             }
 
-            if (null !== $lupaExportableId->getProductVariantToRemoveId()) {
-                $productVariantsIdsToRemove[] = $lupaExportableId->getProductVariantToRemoveId();
+            if (null !== $lupaExportableId->getIdToRemove()) {
+                $idsToRemove[] = $lupaExportableId->getIdToRemove();
             }
         }
 
-        $productVariantsToAdd = $this->productVariantRepository->findEnabledByIds($productVariantsIdsToAdd);
-        $productVariantsToRemove = $this->productVariantRepository->findEnabledByIds($productVariantsIdsToRemove);
+        if (!empty($idsToAdd)) {
+            $productVariantsToAdd = $this->productVariantRepository->findEnabledByIds($idsToAdd);
+            $this->documentsApiManager->importDocuments(
+                $this->fromVariantToDocumentTransformer->transformAll($productVariantsToAdd),
+            );
+        }
 
-        $this->documentsApiManager->importDocuments(
-            $this->fromVariantToDocumentTransformer->transformAll($productVariantsToAdd),
-        );
-        $this->documentsApiManager->batchDelete(
-            $this->fromVariantToBatchDeleteDocumentsTransformer->transform($productVariantsToRemove),
-        );
+        if (!empty($idsToRemove)) {
+            $productVariantsToRemove = $this->productVariantRepository->findEnabledByIds($idsToRemove);
+            $this->documentsApiManager->batchDelete(
+                $this->fromVariantToBatchDeleteDocumentsTransformer->transform($productVariantsToRemove),
+            );
+        }
     }
 }

@@ -8,11 +8,11 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface LupaExportableIdsInterface extends ResourceInterface
 {
-    public function getProductVariantToAddId(): ?int;
+    public function getIdToAdd(): ?int;
 
-    public function setProductVariantToAddId(?int $productVariantToAddId): LupaExportableIds;
+    public function setIdToAdd(?int $idToAdd): LupaExportableIds;
 
-    public function getProductVariantToRemoveId(): ?int;
+    public function getIdToRemove(): ?int;
 
-    public function setProductVariantToRemoveId(?int $productVariantToRemoveId): LupaExportableIds;
+    public function setIdToRemove(?int $idToRemove): LupaExportableIds;
 }

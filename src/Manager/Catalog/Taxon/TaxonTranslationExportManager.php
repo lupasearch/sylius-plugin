@@ -43,7 +43,7 @@ class TaxonTranslationExportManager implements LupaExportManagerInterface
 
         $variants = $this->taxonRepository->findAllEnabledIdsByTaxonCode($taxon->getCode());
         foreach ($variants as $variantId) {
-            $this->lupaContext->addProductVariantIdToAdd($variantId);
+            $this->lupaContext->addIdToAdd($variantId);
         }
     }
 
@@ -61,7 +61,7 @@ class TaxonTranslationExportManager implements LupaExportManagerInterface
 
         $variants = $this->taxonRepository->findAllEnabledIdsByTaxonCode($taxon->getCode());
         foreach ($variants as $variantId) {
-            $this->lupaContext->addProductVariantIdToAdd($variantId);
+            $this->lupaContext->addIdToAdd($variantId);
         }
     }
 }
