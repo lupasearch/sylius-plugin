@@ -1,15 +1,23 @@
 LupaSearch\SyliusLupaSearchPlugin\Entity\LupaExportableIds:
     type: mappedSuperclass
     table: lupasearch_exportable_ids
+    indexes:
+        id_to_add:
+            columns: [id_to_add]
+        id_to_remove:
+            columns: [id_to_remove]
+
     fields:
         id:
             type: integer
             id: true
             generator:
                 strategy: auto
-        productVariantToAddId:
+        idToAdd:
             type: integer
             nullable: true
-        productVariantToRemoveId:
+            column: id_to_add
+        idToRemove:
             type: integer
             nullable: true
+            column: id_to_remove

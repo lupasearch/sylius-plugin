@@ -46,7 +46,7 @@ class ProductTranslationExportManager implements LupaExportManagerInterface
                 continue;
             }
 
-            $this->lupaContext->addProductVariantIdToAdd($variant->getId());
+            $this->lupaContext->addIdToAdd($variant->getId());
         }
     }
 
@@ -63,7 +63,7 @@ class ProductTranslationExportManager implements LupaExportManagerInterface
                 continue;
             }
 
-            $this->lupaContext->addProductVariantIdToRemove($variant->getId());
+            $this->lupaContext->addIdToRemove($variant->getId());
         }
     }
 }

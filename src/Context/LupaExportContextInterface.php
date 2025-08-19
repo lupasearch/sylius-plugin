@@ -6,23 +6,23 @@ namespace LupaSearch\SyliusLupaSearchPlugin\Context;
 
 interface LupaExportContextInterface
 {
-    public function addProductVariantIdToAdd(int $productVariantId): void;
+    public function addIdToAdd(int $id): void;
 
     /**
      * @return int[]
      */
-    public function getProductVariantIdsToAdd(): array;
+    public function getIdsToAdd(): array;
 
-    public function addProductVariantIdToRemove(int $productVariantId): void;
+    public function addIdToRemove(int $id): void;
 
     /**
      * @return int[]
      */
-    public function getProductVariantIdsToRemove(): array;
+    public function getIdsToRemove(): array;
 
-    public function clearProductVariantIdsToAdd(): void;
+    public function clearIdsToAdd(): void;
 
-    public function clearProductVariantIdsToRemove(): void;
+    public function clearIdsToRemove(): void;
 
     public function setQueueForExport(bool $queueForExport): void;
 

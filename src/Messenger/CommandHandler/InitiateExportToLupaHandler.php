@@ -26,7 +26,7 @@ class InitiateExportToLupaHandler implements MessageHandlerInterface
         $application = $this->applicationFactory->createNew();
         $application->setAutoExit(false);
 
-        $input = new ArrayInput(['command' => 'lupasearch:lupa:documents:export:initiate']);
+        $input = new ArrayInput(['command' => 'lupasearch:documents:export:initiate']);
         $output = new BufferedOutput();
         $application->run($input, $output);
     }

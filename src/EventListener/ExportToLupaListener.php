@@ -24,32 +24,57 @@ class ExportToLupaListener
 
     public function postUpdateOrPostPersist(object $object): void
     {
+        if (!$this->lupaExportContext->isQueueForExport()) {
+            return;
+        }
+
         $this->lupaExportManager->export($object);
     }
 
     public function postRemove(object $object): void
     {
+        if (!$this->lupaExportContext->isQueueForExport()) {
+            return;
+        }
+
         $this->lupaExportManager->delete($object);
     }
 
     public function postFlush(): void
     {
-        if (!empty($this->lupaExportContext->getProductVariantIdsToAdd())) {
-            $this->lupasearchLupaBusExport->dispatch(
-                $this->queueExportToLupaFactory->createForImporting(
-                    $this->lupaExportContext->getProductVariantIdsToAdd(),
-                ),
-            );
-            $this->lupaExportContext->clearProductVariantIdsToAdd();
+        if (!$this->lupaExportContext->isQueueForExport()) {
+            return;
         }
 
-        if (!empty($this->lupaExportContext->getProductVariantIdsToRemove())) {
-            $this->lupasearchLupaBusExport->dispatch(
-                $this->queueExportToLupaFactory->createForRemoving(
-                    $this->lupaExportContext->getProductVariantIdsToRemove(),
-                ),
-            );
-            $this->lupaExportContext->clearProductVariantIdsToRemove();
+        $idsToAdd = $this->lupaExportContext->getIdsToAdd();
+        $idsToRemove = $this->lupaExportContext->getIdsToRemove();
+
+        if (empty($idsToAdd) && empty($idsToRemove)) {
+            return;
         }
+
+        $this->lupaExportContext->setQueueForExport(false);
+        try {
+            if (!empty($idsToAdd)) {
+                $this->lupasearchLupaBusExport->dispatch(
+                    $this->queueExportToLupaFactory->createForImporting(
+                        $idsToAdd,
+                    ),
+                );
+                $this->lupaExportContext->clearIdsToAdd();
+            }
+    
+            if (!empty($idsToRemove)) {
+                $this->lupasearchLupaBusExport->dispatch(
+                    $this->queueExportToLupaFactory->createForRemoving(
+                        $idsToRemove,
+                    ),
+                );
+                $this->lupaExportContext->clearIdsToRemove();
+            }
+        } finally {
+            $this->lupaExportContext->setQueueForExport(true);
+        }
+        
     }
 }

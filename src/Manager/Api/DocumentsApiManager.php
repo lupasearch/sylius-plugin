@@ -24,8 +24,17 @@ class DocumentsApiManager implements DocumentsApiManagerInterface
             return;
         }
 
-        /** @var array<string, mixed> $httpBody */
-        $httpBody = $this->normalizer->normalize($documents, null, ['groups' => ['lupasearch:document:read']]);
+        /** @var array<string, mixed> $normalizedDocuments */
+        $normalizedDocuments = $this->normalizer->normalize(
+            $documents,
+            null,
+            ['groups' => ['lupasearch:document:read']],
+        );
+
+        $httpBody = [
+            'documents' => $normalizedDocuments,
+        ];
+
         $this->documentsApi->importDocuments(
             indexId: $this->lupaIndexId,
             httpBody: $httpBody,
@@ -48,8 +57,18 @@ class DocumentsApiManager implements DocumentsApiManagerInterface
 
     public function replaceAllDocuments(DocumentsInterface $documents): void
     {
-        /** @var array<string, mixed> $httpBody */
-        $httpBody = $this->normalizer->normalize($documents, null, ['groups' => ['lupasearch:document:read']]);
+        /** @var array<string, mixed> $normalizedDocuments */
+        $normalizedDocuments = $this->normalizer->normalize(
+            $documents,
+            null,
+            ['groups' => ['lupasearch:document:read']],
+        );
+
+        $httpBody = [
+            'documents' => $normalizedDocuments,
+            'finished' => $documents->isFinished(),
+        ];
+
         $this->documentsApi->replaceAllDocuments(
             indexId: $this->lupaIndexId,
             httpBody: $httpBody,
