@@ -22,6 +22,8 @@ final class Configuration implements ConfigurationInterface
 
     public const PASSWORD = 'password';
 
+    public const API_KEY = 'api_key';
+
     public const INDEX_ID = 'index_id';
 
     public const SEARCH_QUERY_ID = 'search_query_id';
@@ -44,8 +46,9 @@ final class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
-                ->scalarNode(self::EMAIL)->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode(self::PASSWORD)->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode(self::EMAIL)->defaultNull()->end()
+                ->scalarNode(self::PASSWORD)->defaultNull()->end()
+                ->scalarNode(self::API_KEY)->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode(self::INDEX_ID)->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode(self::SEARCH_QUERY_ID)->isRequired()->cannotBeEmpty()->end()
                 ->arrayNode(self::EXPORT)

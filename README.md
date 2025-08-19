@@ -54,8 +54,7 @@ To start using the LupaSearch, you need to configure it first.
 
 ```
 # LupaSearch environment variables
-LUPASEARCH_USER_EMAIL=
-LUPASEARCH_USER_PASSWORD=
+LUPASEARCH_API_KEY=
 LUPASEARCH_INDEX_ID=
 LUPASEARCH_SEARCH_QUERY_ID=
 LUPASEARCH_BATCH_SIZE_FETCH_FROM_DATABASE=100
@@ -69,8 +68,7 @@ Create a file named `lupasearch_sylius_lupasearch.yaml` in the `config/packages`
 
 ```yaml
 lupa_search_sylius_lupa_search:
-    email: "%env(LUPASEARCH_USER_EMAIL)%"
-    password: "%env(LUPASEARCH_USER_PASSWORD)%"
+    api_key: "%env(LUPASEARCH_API_KEY)%"
     index_id: "%env(LUPASEARCH_INDEX_ID)%"
     search_query_id: "%env(LUPASEARCH_SEARCH_QUERY_ID)%"
     export:
@@ -124,3 +122,17 @@ bin/console lupasearch:documents:export:initiate
 This command could be run after you have made changes to your product variants in your Sylius project. Entities associated with product variants that are updated via requests, such as through the Sylius Admin Panel or the API, get synchronized with LupaSearch upon the completion of the KernelFinishRequest. This process is managed using the ProductVariantDispatcherSubscriber class. This command is only needed if catalog updates are made in CLI context (for example during nightly imports).
 
 > ❗ Please note that when using CLI (for example, Sylius catalog import), you should set isQueueForExport() to false in LupaExportContext. This will ensure that the product variants would not be put in the queue for export to LupaSearch. Instead, a good practice is to run the `lupasearch:documents:export:initiate` command after the import is finished.
+
+### Start Queue Consumer
+
+To process the queued product variant exports, you need to run the consumer. This consumer listens for export jobs and sends product data to LupaSearch.
+
+Start it with the following command:
+
+```bash
+bin/console messenger:consume lupasearch_export
+```
+
+You can run this command in the background or set it up as a systemd service, Supervisor job, or Docker service to ensure it’s always running in production.
+
+For development environments, you can run it manually in your terminal whenever you need to process the queued exports.
