@@ -46,7 +46,7 @@ To install the LupaSearch plugin, follow these steps:
     php bin/console cache:clear
     ```
 
-## Configuration
+## Configure the extension
 
 To start using the LupaSearch, you need to configure it first.
 
@@ -79,10 +79,6 @@ lupa_search_sylius_lupa_search:
 Also, you need to add the following environment variables to your `.env` file, the variables names may be different depending on your needs,
 but it should be the same as in the `lupasearch_sylius_lupasearch.yaml` file.
 
-## Usage
-
-This plugin provides LupaSearch service integration to Sylius projects. It offers several commands to synchronize your data with LupaSearch.
-
 ### Update Facets
 
 The `lupasearch:facets:update` command is used to synchronize your facets with LupaSearch. This command fetches all attributes and options from your Sylius project and sends them to LupaSearch as facets.
@@ -96,6 +92,10 @@ bin/console lupasearch:facets:update
 This command could be hooked up on a cron job to ensure that your facets are always up-to-date with your Sylius project. For example, you could set up a cron job to run this command every midnight.
 
 > ❗ Please note that for this command to work, you need to have at least one facet in your search query.
+
+## Synchronize data
+
+This plugin provides LupaSearch service integration to Sylius projects. It offers several commands to synchronize your data with LupaSearch.
 
 ### Export Documents
 
