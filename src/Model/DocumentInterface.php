@@ -35,7 +35,7 @@ interface DocumentInterface
      */
     public function getAttributes(): array;
 
-    public function addAttribute(string $code, string $value): self;
+    public function addAttribute(string $code, $value): self;
 
     /**
      * @return string[]

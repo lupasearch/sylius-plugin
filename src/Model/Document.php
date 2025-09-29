@@ -109,7 +109,7 @@ class Document implements DocumentInterface
         return $this->attributes;
     }
 
-    public function addAttribute(string $code, string $value): self
+    public function addAttribute(string $code, $value): self
     {
         $this->attributes[$code] = $value;
 
