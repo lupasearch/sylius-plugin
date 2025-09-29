@@ -7,22 +7,31 @@ namespace LupaSearch\SyliusLupaSearchPlugin\Transformer;
 use LupaSearch\SyliusLupaSearchPlugin\Enum\FacetType;
 use LupaSearch\SyliusLupaSearchPlugin\Factory\FacetFactoryInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Model\FacetInterface;
+use Sylius\Component\Attribute\AttributeType\TextAttributeType;
 use Sylius\Component\Product\Model\ProductOptionInterface;
 use Webmozart\Assert\Assert;
 
 class FromOptionToFacetTransformer implements FromOptionToFacetTransformerInterface
 {
-    public function __construct(private readonly FacetFactoryInterface $facetFactory)
-    {
+    public function __construct(
+        private readonly FacetFactoryInterface $facetFactory,
+        private readonly AttributeCodeTransformerInterface $attributeCodeTransformer
+    ) {
     }
 
     public function transform(ProductOptionInterface $productOption): FacetInterface
     {
-        $facet = $this->facetFactory->createNew();
-
         Assert::notNull($productOption->getCode());
         Assert::notNull($productOption->getTranslation()->getName());
-        $facet->setKey('attributes.' . $productOption->getCode());
+
+        $facet = $this->facetFactory->createNew();
+        $facet->setKey(
+            $this->attributeCodeTransformer->transform(
+                TextAttributeType::TYPE,
+                $productOption->getCode(),
+                'attributes.'
+            )
+        );
         $facet->setType(FacetType::Terms);
         $facet->setLabel($productOption->getTranslation()->getName());
 
