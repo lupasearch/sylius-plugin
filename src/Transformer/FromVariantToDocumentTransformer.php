@@ -9,10 +9,15 @@ use LupaSearch\SyliusLupaSearchPlugin\Factory\DocumentsFactoryInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Generator\DocumentIdGeneratorInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Model\DocumentInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Model\DocumentsInterface;
+use Sylius\Component\Attribute\AttributeType\DateAttributeType;
+use Sylius\Component\Attribute\AttributeType\DatetimeAttributeType;
+use Sylius\Component\Attribute\AttributeType\TextAttributeType;
 use Sylius\Component\Core\Model\ImageInterface;
 use Sylius\Component\Core\Model\ProductImageInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
+
+use function in_array;
 
 class FromVariantToDocumentTransformer implements FromVariantToDocumentTransformerInterface
 {
@@ -26,11 +31,11 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
     public function transform(ProductVariantInterface $productVariant): DocumentInterface
     {
         $document = $this->documentFactory->createNew();
+
         $document->setId($this->documentIdGenerator->generateFromVariant($productVariant));
         $document->setCode($productVariant->getCode());
         $document->setName($productVariant->getName());
         $document->setVariantCode($productVariant->getCode());
-        $document->setSlug($productVariant->getProduct()?->getSlug());
 
         $image = $productVariant->getImages()->first();
         if ($image instanceof ImageInterface) {
@@ -38,11 +43,10 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
         }
 
         foreach ($productVariant->getOptionValues() as $optionValue) {
-            $document->addAttribute((string) $optionValue->getOptionCode(), (string) $optionValue->getValue());
-        }
-
-        foreach ($productVariant->getProduct()?->getAttributes() ?? [] as $attribute) {
-            $document->addAttribute((string) $attribute->getCode(), (string) $attribute->getValue());
+            $document->addAttribute(
+                (string) $optionValue->getOptionCode(),
+                $this->normalizeAttributeValue(TextAttributeType::TYPE, $optionValue->getValue())
+            );
         }
 
         /** @var ProductInterface|null $product */
@@ -69,15 +73,36 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
     {
         $document->setTaxonCodes($this->getTaxonCodes($product));
         $document->setMainTaxonCode($product->getMainTaxon()?->getCode());
-        $document->setProductId((string)$product->getId());
+        $document->setProductId((string) $product->getId());
         $document->setProductName($product->getName());
+        $document->setSlug($product->getSlug());
 
         $productImage = $product->getImages()->first();
         if ($productImage instanceof ProductImageInterface) {
             $document->setProductMainImage($productImage->getPath());
         }
 
+        foreach ($product->getAttributes() ?? [] as $attribute) {
+            $document->addAttribute(
+                (string) $attribute->getCode(),
+                $this->normalizeAttributeValue($attribute->getType(), $attribute->getValue())
+            );
+        }
+
         return $document;
+    }
+
+    private function normalizeAttributeValue(string $attributeType, $value)
+    {
+        if (in_array($attributeType, [DateAttributeType::TYPE, DatetimeAttributeType::TYPE])) {
+            if ($value instanceof \DateTimeInterface) {
+                return $value->getTimestamp();
+            }
+
+            return null;
+        }
+
+        return $value;
     }
 
     /**
