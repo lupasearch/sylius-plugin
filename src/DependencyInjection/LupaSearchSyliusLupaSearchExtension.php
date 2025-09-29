@@ -8,6 +8,7 @@ use LupaSearch\SyliusLupaSearchPlugin\Commands\ExportLupaDocumentsCommand;
 use LupaSearch\SyliusLupaSearchPlugin\Commands\InitiateLupaDocumentsExportCommand;
 use LupaSearch\SyliusLupaSearchPlugin\Manager\Api\DocumentsApiManager;
 use LupaSearch\SyliusLupaSearchPlugin\Manager\Api\SearchQueriesApiManager;
+use LupaSearch\SyliusLupaSearchPlugin\Transformer\AttributeCodeTransformer;
 use LupaSearch\LupaClient;
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
@@ -57,6 +58,16 @@ final class LupaSearchSyliusLupaSearchExtension extends AbstractResourceExtensio
         $searchQueriesApiManagerDefinition->setArgument(
             '$lupaSearchQueryId',
             $config[Configuration::SEARCH_QUERY_ID],
+        );
+
+        $attributeCodeTransformerDefinition = $container->getDefinition(AttributeCodeTransformer::class);
+        $attributeCodeTransformerDefinition->setArgument(
+            '$typeNumericPrefix',
+            $config[Configuration::ATTRIBUTES][Configuration::ATTRIBUTE_TYPE_NUMERIC_PREFIX]
+        );
+        $attributeCodeTransformerDefinition->setArgument(
+            '$typeTextPrefix',
+            $config[Configuration::ATTRIBUTES][Configuration::ATTRIBUTE_TYPE_TEXT_PREFIX]
         );
     }
 

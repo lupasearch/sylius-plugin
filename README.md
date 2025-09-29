@@ -52,7 +52,7 @@ To start using the LupaSearch, you need to configure it first.
 
 ### Environment variables
 
-```
+```markdown
 # LupaSearch environment variables
 LUPASEARCH_API_KEY=
 LUPASEARCH_INDEX_ID=
@@ -60,6 +60,8 @@ LUPASEARCH_SEARCH_QUERY_ID=
 LUPASEARCH_BATCH_SIZE_FETCH_FROM_DATABASE=100
 LUPASEARCH_BATCH_SIZE_SEND=100
 LUPASEARCH_MESSENGER_TRANSPORT_DSN=amqp://rabbitmquser:rabbitmqpass@rabbitmq:5672
+LUPASEARCH_ATTRIBUTE_TYPE_NUMERIC_PREFIX=
+LUPASEARCH_ATTRIBUTE_TYPE_TEXT_PREFIX=
 ```
 
 ### Configuration file
@@ -74,6 +76,9 @@ lupa_search_sylius_lupa_search:
     export:
         batch_size_fetch_from_database: "%env(int:LUPASEARCH_BATCH_SIZE_FETCH_FROM_DATABASE)%"
         batch_size_send: "%env(int:LUPASEARCH_BATCH_SIZE_SEND)%"
+    attributes:
+        type_numeric_prefix: "%env(LUPASEARCH_ATTRIBUTE_TYPE_NUMERIC_PREFIX)%"
+        type_text_prefix: "%env(LUPASEARCH_ATTRIBUTE_TYPE_TEXT_PREFIX)%"
 ```
 
 Also, you need to add the following environment variables to your `.env` file, the variables names may be different depending on your needs,

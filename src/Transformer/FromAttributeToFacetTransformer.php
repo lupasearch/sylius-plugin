@@ -12,17 +12,25 @@ use Webmozart\Assert\Assert;
 
 class FromAttributeToFacetTransformer implements FromAttributeToFacetTransformerInterface
 {
-    public function __construct(private readonly FacetFactoryInterface $facetFactory)
-    {
+    public function __construct(
+        private readonly FacetFactoryInterface $facetFactory,
+        private readonly AttributeCodeTransformerInterface $attributeCodeTransformer
+    ) {
     }
 
     public function transform(ProductAttributeInterface $productAttribute): FacetInterface
     {
-        $facet = $this->facetFactory->createNew();
-
         Assert::notNull($productAttribute->getCode());
         Assert::notNull($productAttribute->getTranslation()->getName());
-        $facet->setKey('attributes.' . $productAttribute->getCode());
+
+        $facet = $this->facetFactory->createNew();
+        $facet->setKey(
+            $this->attributeCodeTransformer->transform(
+                $productAttribute->getType(),
+                $productAttribute->getCode(),
+                'attributes.'
+            )
+        );
         $facet->setType(FacetType::Terms);
         $facet->setLabel($productAttribute->getTranslation()->getName());
 

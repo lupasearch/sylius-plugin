@@ -25,6 +25,7 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
         private readonly DocumentFactoryInterface $documentFactory,
         private readonly DocumentsFactoryInterface $documentsFactory,
         private readonly DocumentIdGeneratorInterface $documentIdGenerator,
+        private readonly AttributeCodeTransformerInterface $attributeCodeTransformer,
     ) {
     }
 
@@ -84,8 +85,14 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
 
         foreach ($product->getAttributes() ?? [] as $attribute) {
             $document->addAttribute(
-                (string) $attribute->getCode(),
-                $this->normalizeAttributeValue($attribute->getType(), $attribute->getValue())
+                $this->attributeCodeTransformer->transform(
+                    $attribute->getType(),
+                    $attribute->getCode()
+                ),
+                $this->normalizeAttributeValue(
+                    $attribute->getType(),
+                    $attribute->getValue()
+                )
             );
         }
 

@@ -34,6 +34,12 @@ final class Configuration implements ConfigurationInterface
 
     public const EXPORT_BATCH_SIZE_SEND = 'batch_size_send';
 
+    public const ATTRIBUTES = 'attributes';
+
+    public const ATTRIBUTE_TYPE_NUMERIC_PREFIX = 'type_numeric_prefix';
+
+    public const ATTRIBUTE_TYPE_TEXT_PREFIX = 'type_text_prefix';
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(self::NAME);
@@ -55,6 +61,12 @@ final class Configuration implements ConfigurationInterface
                     ->children()
                         ->integerNode(self::EXPORT_BATCH_SIZE_FETCH_FROM_DATABASE)->isRequired()->defaultValue(100)->end()
                         ->integerNode(self::EXPORT_BATCH_SIZE_SEND)->isRequired()->defaultValue(100)->end()
+                    ->end()
+                ->end()
+                ->arrayNode(self::ATTRIBUTES)
+                    ->children()
+                        ->scalarNode(self::ATTRIBUTE_TYPE_NUMERIC_PREFIX)->defaultNull()->end()
+                        ->scalarNode(self::ATTRIBUTE_TYPE_TEXT_PREFIX)->defaultNull()->end()
                     ->end()
                 ->end()
             ->end();
