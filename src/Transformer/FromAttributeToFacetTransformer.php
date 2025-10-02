@@ -26,7 +26,7 @@ class FromAttributeToFacetTransformer implements FromAttributeToFacetTransformer
         $facet = $this->facetFactory->createNew();
         $facet->setKey(
             $this->attributeCodeTransformer->transform(
-                $productAttribute->getType(),
+                $productAttribute->getStorageType(),
                 $productAttribute->getCode(),
                 'attributes.'
             )
