@@ -4,32 +4,22 @@ declare(strict_types=1);
 
 namespace LupaSearch\SyliusLupaSearchPlugin\Transformer;
 
-use Sylius\Component\Attribute\AttributeType\CheckboxAttributeType;
-use Sylius\Component\Attribute\AttributeType\DateAttributeType;
-use Sylius\Component\Attribute\AttributeType\DatetimeAttributeType;
-use Sylius\Component\Attribute\AttributeType\FloatAttributeType;
-use Sylius\Component\Attribute\AttributeType\IntegerAttributeType;
-use Sylius\Component\Attribute\AttributeType\PercentAttributeType;
-use Sylius\Component\Attribute\AttributeType\SelectAttributeType;
-use Sylius\Component\Attribute\AttributeType\TextareaAttributeType;
-use Sylius\Component\Attribute\AttributeType\TextAttributeType;
+use Sylius\Component\Attribute\Model\AttributeValueInterface;
 use Webmozart\Assert\Assert;
 
 class AttributeCodeTransformer implements AttributeCodeTransformerInterface
 {
     private const NUMERIC_ATTRIBUTE_TYPES = [
-        DateAttributeType::TYPE, 
-        DatetimeAttributeType::TYPE, 
-        FloatAttributeType::TYPE, 
-        IntegerAttributeType::TYPE, 
-        PercentAttributeType::TYPE
+        AttributeValueInterface::STORAGE_DATE,
+        AttributeValueInterface::STORAGE_DATETIME,
+        AttributeValueInterface::STORAGE_FLOAT,
+        AttributeValueInterface::STORAGE_INTEGER,
     ];
 
     private const TEXT_ATTRIBUTE_TYPES = [
-        TextAttributeType::TYPE, 
-        TextareaAttributeType::TYPE, 
-        SelectAttributeType::TYPE, 
-        CheckboxAttributeType::TYPE
+        AttributeValueInterface::STORAGE_BOOLEAN,
+        AttributeValueInterface::STORAGE_JSON,
+        AttributeValueInterface::STORAGE_TEXT,
     ];
 
     public function __construct(

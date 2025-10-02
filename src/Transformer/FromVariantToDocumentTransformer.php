@@ -9,9 +9,7 @@ use LupaSearch\SyliusLupaSearchPlugin\Factory\DocumentsFactoryInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Generator\DocumentIdGeneratorInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Model\DocumentInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Model\DocumentsInterface;
-use Sylius\Component\Attribute\AttributeType\DateAttributeType;
-use Sylius\Component\Attribute\AttributeType\DatetimeAttributeType;
-use Sylius\Component\Attribute\AttributeType\TextAttributeType;
+use Sylius\Component\Attribute\Model\AttributeValueInterface;
 use Sylius\Component\Core\Model\ImageInterface;
 use Sylius\Component\Core\Model\ProductImageInterface;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -45,8 +43,11 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
 
         foreach ($productVariant->getOptionValues() as $optionValue) {
             $document->addAttribute(
-                (string) $optionValue->getOptionCode(),
-                $this->normalizeAttributeValue(TextAttributeType::TYPE, $optionValue->getValue())
+                $this->attributeCodeTransformer->transform(
+                    AttributeValueInterface::STORAGE_TEXT,
+                    (string) $optionValue->getOptionCode(),
+                ),
+                $this->normalizeAttributeValue(AttributeValueInterface::STORAGE_TEXT, $optionValue->getValue()),
             );
         }
 
@@ -83,15 +84,16 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
             $document->setProductMainImage($productImage->getPath());
         }
 
-        foreach ($product->getAttributes() ?? [] as $attribute) {
+        foreach ($product->getAttributes() ?? [] as $attributeValue) {
+            $attribute = $attributeValue->getAttribute();
             $document->addAttribute(
                 $this->attributeCodeTransformer->transform(
-                    $attribute->getType(),
+                    $attribute->getStorageType(),
                     $attribute->getCode()
                 ),
                 $this->normalizeAttributeValue(
-                    $attribute->getType(),
-                    $attribute->getValue()
+                    $attribute->getStorageType(),
+                    $attributeValue->getValue()
                 )
             );
         }
@@ -99,9 +101,14 @@ class FromVariantToDocumentTransformer implements FromVariantToDocumentTransform
         return $document;
     }
 
-    private function normalizeAttributeValue(string $attributeType, $value)
+    private function normalizeAttributeValue(string $attributeValueType, $value)
     {
-        if (in_array($attributeType, [DateAttributeType::TYPE, DatetimeAttributeType::TYPE])) {
+        if (
+            in_array($attributeValueType, [
+                AttributeValueInterface::STORAGE_DATE,
+                AttributeValueInterface::STORAGE_DATETIME,
+            ])
+        ) {
             if ($value instanceof \DateTimeInterface) {
                 return $value->getTimestamp();
             }
