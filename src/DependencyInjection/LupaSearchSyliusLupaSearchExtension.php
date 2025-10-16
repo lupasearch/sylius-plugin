@@ -6,6 +6,7 @@ namespace LupaSearch\SyliusLupaSearchPlugin\DependencyInjection;
 
 use LupaSearch\SyliusLupaSearchPlugin\Commands\ExportLupaDocumentsCommand;
 use LupaSearch\SyliusLupaSearchPlugin\Commands\InitiateLupaDocumentsExportCommand;
+use LupaSearch\SyliusLupaSearchPlugin\EventListener\InitiateExportToLupaSubscriber;
 use LupaSearch\SyliusLupaSearchPlugin\Manager\Api\DocumentsApiManager;
 use LupaSearch\SyliusLupaSearchPlugin\Manager\Api\SearchQueriesApiManager;
 use LupaSearch\SyliusLupaSearchPlugin\Transformer\AttributeCodeTransformer;
@@ -48,6 +49,12 @@ final class LupaSearchSyliusLupaSearchExtension extends AbstractResourceExtensio
         $sendPartialVariantsToLupaDefinition->setArgument(
             '$limit',
             $config[Configuration::EXPORT][Configuration::EXPORT_BATCH_SIZE_FETCH_FROM_DATABASE],
+        );
+
+        $initiateExportToLupaSubscriberDefinition = $container->getDefinition(InitiateExportToLupaSubscriber::class);
+        $initiateExportToLupaSubscriberDefinition->setArgument(
+            '$isSubscriberEnabled',
+            $config[Configuration::EXPORT][Configuration::EXPORT_AUTOMATED_INITIATE_EXPORT_ENABLED],
         );
 
         $documentsApiManagerDefinition = $container->getDefinition(DocumentsApiManager::class);

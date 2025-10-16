@@ -54,6 +54,7 @@ To start using the LupaSearch, you need to configure it first.
 
 ```markdown
 # LupaSearch environment variables
+
 LUPASEARCH_API_KEY=
 LUPASEARCH_INDEX_ID=
 LUPASEARCH_SEARCH_QUERY_ID=
@@ -62,6 +63,7 @@ LUPASEARCH_BATCH_SIZE_SEND=100
 LUPASEARCH_MESSENGER_TRANSPORT_DSN=amqp://rabbitmquser:rabbitmqpass@rabbitmq:5672
 LUPASEARCH_ATTRIBUTE_TYPE_NUMERIC_PREFIX=
 LUPASEARCH_ATTRIBUTE_TYPE_TEXT_PREFIX=
+LUPASEARCH_AUTOMATED_INITIATE_EXPORT_ENABLED=
 ```
 
 ### Configuration file
@@ -69,6 +71,9 @@ LUPASEARCH_ATTRIBUTE_TYPE_TEXT_PREFIX=
 Create a file named `lupasearch_sylius_lupasearch.yaml` in the `config/packages` directory of your Sylius project with the following content:
 
 ```yaml
+parameters:
+    env(LUPASEARCH_AUTOMATED_INITIATE_EXPORT_ENABLED): "false"
+
 lupa_search_sylius_lupa_search:
     api_key: "%env(LUPASEARCH_API_KEY)%"
     index_id: "%env(LUPASEARCH_INDEX_ID)%"
@@ -76,6 +81,7 @@ lupa_search_sylius_lupa_search:
     export:
         batch_size_fetch_from_database: "%env(int:LUPASEARCH_BATCH_SIZE_FETCH_FROM_DATABASE)%"
         batch_size_send: "%env(int:LUPASEARCH_BATCH_SIZE_SEND)%"
+        automated_initiate_export_enabled: "%env(bool:LUPASEARCH_AUTOMATED_INITIATE_EXPORT_ENABLED)%"
     attributes:
         type_numeric_prefix: "%env(LUPASEARCH_ATTRIBUTE_TYPE_NUMERIC_PREFIX)%"
         type_text_prefix: "%env(LUPASEARCH_ATTRIBUTE_TYPE_TEXT_PREFIX)%"
@@ -102,7 +108,7 @@ This command could be hooked up on a cron job to ensure that your facets are alw
 
 This plugin provides LupaSearch service integration to Sylius projects. It offers several commands to synchronize your data with LupaSearch.
 
-### Export Documents
+### Export All Documents
 
 The `lupasearch:documents:export` command is used to export all enabled product variants as documents to LupaSearch. This command fetches all enabled product variants from your Sylius project and sends them to LupaSearch. To do this, use the following command in your terminal:
 
@@ -114,7 +120,7 @@ This command could be run one time after a nightly import to your Sylius project
 
 > ❗ Please note that when using CLI (for example, Sylius catalog import), you should set isQueueForExport() to false in LupaExportContext. This will ensure that the product variants would not be put in the queue for export to LupaSearch. Instead, a good practice is to run the `lupasearch:documents:export` command after the import is finished.
 
-### Initiate Documents Export
+### Export Queued Documents
 
 The `lupasearch:documents:export:initiate` command is used to fetch all queued catalog from the database and puts respective variants to the message queue for export to Lupa.
 
@@ -124,9 +130,21 @@ To do this, use the following command in your terminal:
 bin/console lupasearch:documents:export:initiate
 ```
 
-This command could be run after you have made changes to your product variants in your Sylius project. Entities associated with product variants that are updated via requests, such as through the Sylius Admin Panel or the API, get synchronized with LupaSearch upon the completion of the KernelFinishRequest. This process is managed using the ProductVariantDispatcherSubscriber class. This command is only needed if catalog updates are made in CLI context (for example during nightly imports).
-
 > ❗ Please note that when using CLI (for example, Sylius catalog import), you should set isQueueForExport() to false in LupaExportContext. This will ensure that the product variants would not be put in the queue for export to LupaSearch. Instead, a good practice is to run the `lupasearch:documents:export:initiate` command after the import is finished.
+
+#### Queued Synchronization Options
+
+You have two options for queued synchronization of product variants:
+
+1. **Enable Automated Export**: Set the `LUPASEARCH_AUTOMATED_INITIATE_EXPORT_ENABLED` environment variable to `true`. The synchronization with LupaSearch occurs upon the completion of the `KernelFinishRequest`. This option is suitable for low-traffic sites.
+
+2. **Scheduled Export (Recommended for High-Traffic Sites)**: Set up a cron job or scheduler to run the `lupasearch:documents:export:initiate` command periodically. For example, you could configure a cron job to run this command every 15 minutes:
+
+    ```bash
+    */15 * * * * bin/console lupasearch:documents:export:initiate
+    ```
+
+    This approach ensures that the synchronization process does not impact the performance of your Sylius store during high traffic.
 
 ### Start Queue Consumer
 

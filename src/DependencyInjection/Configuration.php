@@ -34,6 +34,8 @@ final class Configuration implements ConfigurationInterface
 
     public const EXPORT_BATCH_SIZE_SEND = 'batch_size_send';
 
+    public const EXPORT_AUTOMATED_INITIATE_EXPORT_ENABLED = 'automated_initiate_export_enabled';
+
     public const ATTRIBUTES = 'attributes';
 
     public const ATTRIBUTE_TYPE_NUMERIC_PREFIX = 'type_numeric_prefix';
@@ -61,6 +63,7 @@ final class Configuration implements ConfigurationInterface
                     ->children()
                         ->integerNode(self::EXPORT_BATCH_SIZE_FETCH_FROM_DATABASE)->isRequired()->defaultValue(100)->end()
                         ->integerNode(self::EXPORT_BATCH_SIZE_SEND)->isRequired()->defaultValue(100)->end()
+                        ->booleanNode(self::EXPORT_AUTOMATED_INITIATE_EXPORT_ENABLED)->defaultFalse()->end()
                     ->end()
                 ->end()
                 ->arrayNode(self::ATTRIBUTES)

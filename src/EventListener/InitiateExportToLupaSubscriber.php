@@ -15,6 +15,7 @@ class InitiateExportToLupaSubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly MessageBusInterface $lupasearchLupaBusExport,
         private readonly InitiateExportToLupaFactoryInterface $initiateExportToLupaFactory,
+        private readonly bool $isSubscriberEnabled = false,
     ) {
     }
 
@@ -27,6 +28,10 @@ class InitiateExportToLupaSubscriber implements EventSubscriberInterface
 
     public function onKernelTerminate(TerminateEvent $event): void
     {
+        if (!$this->isSubscriberEnabled || !$event->isMainRequest()) {
+            return;
+        }
+
         $this->lupasearchLupaBusExport->dispatch($this->initiateExportToLupaFactory->createNew());
     }
 }
