@@ -45,29 +45,27 @@ class ProductVariantRepository extends ServiceEntityRepository implements Produc
 
     public function findAllEnabledIdsByTaxonCode(string $taxonCode): array
     {
-        $qb = $this->createQueryBuilder('product_variant');
-
-        $query = $qb
+        $mainTaxonMatchQb = $this->createQueryBuilder('product_variant')
             ->select('product_variant.id')
-            ->distinct()
-            ->from(ProductInterface::class, 'product')
-            ->from(ProductTaxonInterface::class, 'productTaxon')
-            ->from(TaxonInterface::class, 'taxon')
-            ->andWhere('taxon.code = :taxonCode')
-            ->setParameter('taxonCode', $taxonCode)
-            ->andWhere($qb->expr()->orX(
-                $qb->expr()->eq('product.mainTaxon', 'taxon'),
-                $qb->expr()->andX(
-                    $qb->expr()->eq('productTaxon.taxon', 'taxon'),
-                    $qb->expr()->eq('productTaxon.product', 'product'),
-                ),
-            ))
-            ->andWhere('product_variant.product = product')
+            ->innerJoin('product_variant.product', 'product')
+            ->innerJoin('product.mainTaxon', 'mainTaxon')
             ->andWhere('product_variant.enabled = true')
-            ->getQuery();
+            ->andWhere('mainTaxon.code = :taxonCode')
+            ->setParameter('taxonCode', $taxonCode);
 
-        $result = $query->getSingleColumnResult();
-        Assert::allInteger($result);
+        $productTaxonMatchQb = $this->createQueryBuilder('product_variant')
+            ->select('product_variant.id')
+            ->innerJoin('product_variant.product', 'product')
+            ->innerJoin('product.productTaxons', 'productTaxon')
+            ->innerJoin('productTaxon.taxon', 'taxon')
+            ->andWhere('product_variant.enabled = true')
+            ->andWhere('taxon.code = :taxonCode')
+            ->setParameter('taxonCode', $taxonCode);
+
+        $mainTaxonMatchResultIds = $mainTaxonMatchQb->getQuery()->getSingleColumnResult();
+        $productTaxonMatchResultIds = $productTaxonMatchQb->getQuery()->getSingleColumnResult();
+
+        $result = array_unique(array_map('intval', array_merge($mainTaxonMatchResultIds, $productTaxonMatchResultIds)));
 
         return $result;
     }
