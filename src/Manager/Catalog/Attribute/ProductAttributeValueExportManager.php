@@ -6,7 +6,6 @@ namespace LupaSearch\SyliusLupaSearchPlugin\Manager\Catalog\Attribute;
 
 use LupaSearch\SyliusLupaSearchPlugin\Context\LupaExportContextInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Manager\LupaExportManagerInterface;
-use LupaSearch\SyliusLupaSearchPlugin\Repository\Product\ProductVariantRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Sylius\Component\Product\Model\ProductAttributeValueInterface;
 
@@ -17,7 +16,6 @@ class ProductAttributeValueExportManager implements LupaExportManagerInterface
 {
     public function __construct(
         private readonly LupaExportContextInterface $lupaContext,
-        private readonly ProductVariantRepositoryInterface $productVariantRepository,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -30,32 +28,44 @@ class ProductAttributeValueExportManager implements LupaExportManagerInterface
     public function export(object $object): void
     {
         if (null === $object->getCode()) {
-            $this->logger->warning(
-                sprintf('Product attribute value with id %s has no code', $object->getId()),
-            );
+            $this->logger->warning(sprintf("Product attribute value with id %s has no code", $object->getId()));
 
             return;
         }
 
-        $variants = $this->productVariantRepository->findAllEnabledIdsByAttributeCode($object->getCode());
-        foreach ($variants as $variantId) {
+        $product = $object->getSubject();
+        if (!$product) {
+            $this->logger->warning(
+                sprintf("Product attribute value with id %s has no associated product", $object->getId())
+            );
+            return;
+        }
+
+        $variants = $product->getVariants();
+        if (!$variants) {
+            $this->logger->warning(
+                sprintf(
+                    "Product with id %s has no variants for attribute value code %s",
+                    $product->getId(),
+                    $object->getCode()
+                )
+            );
+            return;
+        }
+
+        $variantIds = $variants->map(fn($variant) => $variant->getId())->toArray();
+
+        foreach ($variantIds as $variantId) {
             $this->lupaContext->addIdToAdd($variantId);
         }
     }
 
     public function delete(object $object): void
     {
-        if (null === $object->getCode()) {
-            $this->logger->warning(
-                sprintf('Product attribute value with id %s has no code', $object->getId()),
-            );
-
-            return;
-        }
-
-        $variants = $this->productVariantRepository->findAllEnabledIdsByAttributeCode($object->getCode());
-        foreach ($variants as $variantId) {
-            $this->lupaContext->addIdToAdd($variantId);
-        }
+        /**
+         * No action is required on delete for attribute values in this manager.
+         * The attribute value logic is implemented in EventListener/ProductAttributeValueOnFlushListener.php
+         * due to the absence of a product relation in this handler.
+         */
     }
 }
