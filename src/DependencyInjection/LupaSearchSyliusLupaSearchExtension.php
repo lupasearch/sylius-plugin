@@ -10,6 +10,7 @@ use LupaSearch\SyliusLupaSearchPlugin\EventListener\InitiateExportToLupaSubscrib
 use LupaSearch\SyliusLupaSearchPlugin\Manager\Api\DocumentsApiManager;
 use LupaSearch\SyliusLupaSearchPlugin\Manager\Api\SearchQueriesApiManager;
 use LupaSearch\SyliusLupaSearchPlugin\Transformer\AttributeCodeTransformer;
+use LupaSearch\SyliusLupaSearchPlugin\Transformer\AttributeFacetTypeResolver;
 use LupaSearch\LupaClient;
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
@@ -75,6 +76,12 @@ final class LupaSearchSyliusLupaSearchExtension extends AbstractResourceExtensio
         $attributeCodeTransformerDefinition->setArgument(
             '$typeTextPrefix',
             $config[Configuration::ATTRIBUTES][Configuration::ATTRIBUTE_TYPE_TEXT_PREFIX]
+        );
+
+        $attributeFacetTypeResolverDefinition = $container->getDefinition(AttributeFacetTypeResolver::class);
+        $attributeFacetTypeResolverDefinition->setArgument(
+            '$numericFacetType',
+            $config[Configuration::ATTRIBUTES][Configuration::NUMERIC_FACET_TYPE]
         );
     }
 
