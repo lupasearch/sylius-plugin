@@ -14,7 +14,8 @@ class FromAttributeToFacetTransformer implements FromAttributeToFacetTransformer
 {
     public function __construct(
         private readonly FacetFactoryInterface $facetFactory,
-        private readonly AttributeCodeTransformerInterface $attributeCodeTransformer
+        private readonly AttributeCodeTransformerInterface $attributeCodeTransformer,
+        private readonly AttributeFacetTypeResolverInterface $attributeFacetTypeResolver
     ) {
     }
 
@@ -31,7 +32,7 @@ class FromAttributeToFacetTransformer implements FromAttributeToFacetTransformer
                 'attributes.'
             )
         );
-        $facet->setType(FacetType::Terms);
+        $facet->setType($this->attributeFacetTypeResolver->resolve($productAttribute->getStorageType()));
         $facet->setLabel($productAttribute->getTranslation()->getName());
 
         return $facet;

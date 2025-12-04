@@ -42,6 +42,8 @@ final class Configuration implements ConfigurationInterface
 
     public const ATTRIBUTE_TYPE_TEXT_PREFIX = 'type_text_prefix';
 
+    public const NUMERIC_FACET_TYPE = 'numeric_facet_type';
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(self::NAME);
@@ -70,6 +72,7 @@ final class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode(self::ATTRIBUTE_TYPE_NUMERIC_PREFIX)->defaultNull()->end()
                         ->scalarNode(self::ATTRIBUTE_TYPE_TEXT_PREFIX)->defaultNull()->end()
+                        ->scalarNode(self::NUMERIC_FACET_TYPE)->defaultNull()->end()
                     ->end()
                 ->end()
             ->end();

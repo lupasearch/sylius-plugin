@@ -15,7 +15,8 @@ class FromOptionToFacetTransformer implements FromOptionToFacetTransformerInterf
 {
     public function __construct(
         private readonly FacetFactoryInterface $facetFactory,
-        private readonly AttributeCodeTransformerInterface $attributeCodeTransformer
+        private readonly AttributeCodeTransformerInterface $attributeCodeTransformer,
+        private readonly AttributeFacetTypeResolverInterface $attributeFacetTypeResolver
     ) {
     }
 
@@ -32,7 +33,7 @@ class FromOptionToFacetTransformer implements FromOptionToFacetTransformerInterf
                 'attributes.'
             )
         );
-        $facet->setType(FacetType::Terms);
+        $facet->setType($this->attributeFacetTypeResolver->resolve(TextAttributeType::TYPE));
         $facet->setLabel($productOption->getTranslation()->getName());
 
         return $facet;

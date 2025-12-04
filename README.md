@@ -85,6 +85,7 @@ lupa_search_sylius_lupa_search:
     attributes:
         type_numeric_prefix: "%env(LUPASEARCH_ATTRIBUTE_TYPE_NUMERIC_PREFIX)%"
         type_text_prefix: "%env(LUPASEARCH_ATTRIBUTE_TYPE_TEXT_PREFIX)%"
+        numeric_facet_type: "%env(LUPASEARCH_NUMERIC_FACET_TYPE)%"
 ```
 
 Also, you need to add the following environment variables to your `.env` file, the variables names may be different depending on your needs,
