@@ -17,6 +17,13 @@ interface ProductVariantRepositoryInterface extends ObjectRepository
      *
      * @return ProductVariantInterface[]
      */
+    public function findByIds(array $ids): array;
+
+    /**
+     * @param array<bool|int> $ids
+     *
+     * @return ProductVariantInterface[]
+     */
     public function findEnabledByIds(array $ids): array;
 
     /**
