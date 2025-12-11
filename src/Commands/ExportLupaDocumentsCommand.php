@@ -44,7 +44,7 @@ class ExportLupaDocumentsCommand extends Command
         $isFinishedSet = false;
         $io = new SymfonyStyle($input, $output);
         $io->info('Product variant sending to Lupa has started.');
-        $limit = $input->getOption('limit');
+        $limit = (int) $input->getOption('limit');
 
         $productVariants = $this->productVariantRepository->findAllEnabledInBatches($limit, $offset);
         if (0 === count($productVariants)) {
