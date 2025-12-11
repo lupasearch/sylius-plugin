@@ -19,6 +19,18 @@ use Webmozart\Assert\Assert;
  */
 class ProductVariantRepository extends ServiceEntityRepository implements ProductVariantRepositoryInterface
 {
+    public function findByIds(array $ids): array
+    {
+        /** @var ProductVariantInterface[] */
+        return $this->createQueryBuilder('product_variant')
+            ->select('product_variant')
+            ->distinct()
+            ->where('product_variant.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findEnabledByIds(array $ids): array
     {
         /** @var ProductVariantInterface[] */

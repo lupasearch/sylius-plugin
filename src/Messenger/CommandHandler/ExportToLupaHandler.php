@@ -48,7 +48,7 @@ class ExportToLupaHandler implements MessageHandlerInterface
         }
 
         if (!empty($idsToRemove)) {
-            $productVariantsToRemove = $this->productVariantRepository->findEnabledByIds($idsToRemove);
+            $productVariantsToRemove = $this->productVariantRepository->findByIds($idsToRemove);
             $this->documentsApiManager->batchDelete(
                 $this->fromVariantToBatchDeleteDocumentsTransformer->transform($productVariantsToRemove),
             );
