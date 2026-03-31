@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LupaSearch\SyliusLupaSearchPlugin\Commands;
 
+use Doctrine\ORM\EntityManagerInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Factory\DocumentsFactoryInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Manager\Api\DocumentsApiManagerInterface;
 use LupaSearch\SyliusLupaSearchPlugin\Repository\Product\ProductVariantRepositoryInterface;
@@ -21,6 +22,7 @@ class ExportLupaDocumentsCommand extends Command
         private readonly FromVariantToDocumentTransformerInterface $fromVariantToDocumentTransformer,
         private readonly DocumentsApiManagerInterface $documentsApiManager,
         private readonly DocumentsFactoryInterface $documentsFactory,
+        private readonly EntityManagerInterface $entityManager,
         private readonly int $limit,
     ) {
         parent::__construct();
@@ -59,6 +61,7 @@ class ExportLupaDocumentsCommand extends Command
             }
 
             $this->documentsApiManager->replaceAllDocuments(documents: $documentsToReplace);
+            $this->entityManager->clear();
 
             $offset += $this->limit;
             $productVariants = $this->productVariantRepository->findAllEnabledInBatches($this->limit, $offset);
