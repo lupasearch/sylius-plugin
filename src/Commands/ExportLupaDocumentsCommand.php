@@ -11,6 +11,7 @@ use LupaSearch\SyliusLupaSearchPlugin\Repository\Product\ProductVariantRepositor
 use LupaSearch\SyliusLupaSearchPlugin\Transformer\FromVariantToDocumentTransformerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -32,7 +33,8 @@ class ExportLupaDocumentsCommand extends Command
     {
         $this
             ->setName('lupasearch:documents:export')
-            ->setDescription('Export all variants as documents to Lupa');
+            ->setDescription('Export all variants as documents to Lupa')
+            ->addOption('limit', null, InputOption::VALUE_OPTIONAL, 'Limit number of variants per batch', $this->limit);
     }
 
     /**
@@ -44,8 +46,9 @@ class ExportLupaDocumentsCommand extends Command
         $isFinishedSet = false;
         $io = new SymfonyStyle($input, $output);
         $io->info('Product variant sending to Lupa has started.');
+        $limit = (int) $input->getOption('limit');
 
-        $productVariants = $this->productVariantRepository->findAllEnabledInBatches($this->limit, $offset);
+        $productVariants = $this->productVariantRepository->findAllEnabledInBatches($limit, $offset);
         if (0 === count($productVariants)) {
             $io->error('No product variants were found while trying to export the first batch to LupaSearch.');
 
@@ -55,7 +58,7 @@ class ExportLupaDocumentsCommand extends Command
         while (0 !== count($productVariants)) {
             $documentsToReplace = $this->fromVariantToDocumentTransformer->transformAll($productVariants);
 
-            if ($this->limit > count($productVariants)) {
+            if ($limit > count($productVariants)) {
                 $documentsToReplace->setFinished(true);
                 $isFinishedSet = true;
             }
@@ -63,8 +66,8 @@ class ExportLupaDocumentsCommand extends Command
             $this->documentsApiManager->replaceAllDocuments(documents: $documentsToReplace);
             $this->entityManager->clear();
 
-            $offset += $this->limit;
-            $productVariants = $this->productVariantRepository->findAllEnabledInBatches($this->limit, $offset);
+            $offset += $limit;
+            $productVariants = $this->productVariantRepository->findAllEnabledInBatches($limit, $offset);
         }
 
         if (!$isFinishedSet) {
