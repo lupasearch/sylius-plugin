@@ -13,7 +13,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class InitiateExportToLupaSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly MessageBusInterface $lupasearchLupaBusExport,
+        private readonly MessageBusInterface $lupasearchBusExport,
         private readonly InitiateExportToLupaFactoryInterface $initiateExportToLupaFactory,
         private readonly bool $isSubscriberEnabled = false,
     ) {
@@ -32,6 +32,6 @@ class InitiateExportToLupaSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->lupasearchLupaBusExport->dispatch($this->initiateExportToLupaFactory->createNew());
+        $this->lupasearchBusExport->dispatch($this->initiateExportToLupaFactory->createNew());
     }
 }

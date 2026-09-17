@@ -18,7 +18,7 @@ class InitiateLupaDocumentsExportCommand extends Command
     public function __construct(
         private readonly LupaExportableIdsRepositoryInterface $lupaExportableIdsRepository,
         private readonly ExportToLupaFactoryInterface $exportToLupaFactory,
-        private readonly MessageBusInterface $lupasearchLupaBusExport,
+        private readonly MessageBusInterface $lupasearchBusExport,
         private readonly int $limit,
     ) {
         parent::__construct();
@@ -40,7 +40,7 @@ class InitiateLupaDocumentsExportCommand extends Command
         $lupaExportableIds = $this->lupaExportableIdsRepository->findAllInBatches($this->limit, $offset);
 
         while (0 !== count($lupaExportableIds)) {
-            $this->lupasearchLupaBusExport->dispatch($this->exportToLupaFactory->createForImporting($lupaExportableIds));
+            $this->lupasearchBusExport->dispatch($this->exportToLupaFactory->createForImporting($lupaExportableIds));
             $this->lupaExportableIdsRepository->deleteByIds(array_unique($this->gatherIdsToDelete($lupaExportableIds)));
 
             $offset += $this->limit;
