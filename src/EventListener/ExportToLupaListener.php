@@ -17,7 +17,7 @@ class ExportToLupaListener
     public function __construct(
         private readonly LupaExportManagerInterface $lupaExportManager,
         private readonly QueueExportToLupaFactoryInterface $queueExportToLupaFactory,
-        private readonly MessageBusInterface $lupasearchLupaBusExport,
+        private readonly MessageBusInterface $lupasearchBusExport,
         private readonly LupaExportContextInterface $lupaExportContext,
     ) {
     }
@@ -56,7 +56,7 @@ class ExportToLupaListener
         $this->lupaExportContext->setQueueForExport(false);
         try {
             if (!empty($idsToAdd)) {
-                $this->lupasearchLupaBusExport->dispatch(
+                $this->lupasearchBusExport->dispatch(
                     $this->queueExportToLupaFactory->createForImporting(
                         $idsToAdd,
                     ),
@@ -65,7 +65,7 @@ class ExportToLupaListener
             }
     
             if (!empty($idsToRemove)) {
-                $this->lupasearchLupaBusExport->dispatch(
+                $this->lupasearchBusExport->dispatch(
                     $this->queueExportToLupaFactory->createForRemoving(
                         $idsToRemove,
                     ),
